@@ -15,6 +15,7 @@ if st.button('Mostrar distribuição dos preços'):
     st.plotly_chart(fig)
 
 
+show_scatter = st.checkbox("Mostrar gráfico de dispersão")
 if show_scatter:
     fig = px.scatter(df, x='odometer', y='price', title='Preço vs Quilometragem', opacity=0.5)
     fig.update_layout(xaxis_title='Quilometragem', yaxis_title='Preço (R$)')
