@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from datetime import datetime
 
 #Carregando os dados
 df = pd.read_csv('vehicles.csv')
@@ -33,7 +34,7 @@ if st.button('Mostrar distribuição dos preços'):
 
 
 #Checkbox Preço x Quilometragem 
-show_scatter = st.checkbox("Mostrar gráfico de dispersão")
+show_scatter = st.checkbox("Gráfico de dispersão Preço x Quilometragem")
 if show_scatter:
     fig = px.scatter(df, x='odometer', y='price', title='Preço vs Quilometragem', opacity=0.5)
     fig.update_layout(xaxis_title='Quilometragem', yaxis_title='Preço (R$)')
@@ -41,7 +42,10 @@ if show_scatter:
 
 
 #Checkbox Preço x Idade
-show_price_age = st.checkbox("Preço Médio por Idade do Carro")
+current_year = datetime.now().year
+df['vehicle_age'] = current_year - df['year']
+
+show_price_age = st.checkbox("Gráfico Preço Médio por Idade do Carro")
 if show_price_age:
     price_by_age = df.groupby('vehicle_age')['price'].mean().reset_index()
     fig_price_age = px.line(
