@@ -29,7 +29,7 @@ st.subheader("Selecione o(s) gráfico(s) que deseja visualizar")
 #Botão para mostrar histograma dos preços
 if st.button('Mostrar distribuição dos preços'):
     fig = px.histogram(df[df['price'] < 70000], x='price', nbins=50, title='Distribuição dos preços dos carros (até 70k)')
-    fig.update_layout(xaxis_title='Preço (R$)', yaxis_title='Quantidade')
+    fig.update_layout(xaxis_title='Preço ($)', yaxis_title='Quantidade')
     st.plotly_chart(fig)
 
 
@@ -37,13 +37,14 @@ if st.button('Mostrar distribuição dos preços'):
 show_scatter = st.checkbox("Gráfico de dispersão Preço x Quilometragem")
 if show_scatter:
     fig = px.scatter(df, x='odometer', y='price', title='Preço vs Quilometragem', opacity=0.5)
-    fig.update_layout(xaxis_title='Quilometragem', yaxis_title='Preço (R$)')
+    fig.update_layout(xaxis_title='Quilometragem', yaxis_title='Preço ($)')
     st.plotly_chart(fig)
 
 
 #Checkbox Preço x Idade
 current_year = datetime.now().year
-df['vehicle_age'] = current_year - df['year']
+df['vehicle_age'] = current_year - df['model_year']
+df['brand'] = df['model'].str.split().str[0]  # <-- Adicionada aqui
 
 show_price_age = st.checkbox("Gráfico Preço Médio por Idade do Carro")
 if show_price_age:
@@ -53,7 +54,7 @@ if show_price_age:
         x='vehicle_age',
         y='price',
         title='Preço Médio por Idade do Carro',
-        labels={'vehicle_age': 'Idade do carro (anos)', 'price': 'Preço Médio (R$)'},
+        labels={'vehicle_age': 'Idade do carro (anos)', 'price': 'Preço Médio ($)'},
     )
     st.plotly_chart(fig_price_age)
 
@@ -68,7 +69,7 @@ if show_price_brand:
         x='brand',
         y='price',
         title='Preço médio por marca de carro',
-        labels={'brand': 'Marca', 'price': 'Preço médio (R$)'},
+        labels={'brand': 'Marca', 'price': 'Preço médio ($)'},
         color_discrete_sequence=['steelblue']
     )
     fig_price_brand.update_layout(xaxis_tickangle=-45)
